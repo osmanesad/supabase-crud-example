@@ -10,6 +10,36 @@ const Update = () => {
   const[title, setTitle] = useState('')
   const[method, setMethod] = useState('')
   const[rating, setRating] = useState('')
+  const [formError, setFormError] = useState(null)
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault()
+
+    if (!title || !method || !rating) {
+      setFormError('Lütfen boş alanları doldurun.')
+      return
+    }
+
+    const{ data, error } = await supabase
+    .form('supatable')
+    .update({ title, method, rating })
+    .eq('id', id)
+    .select()
+    
+    if(error){
+      console.log(error)
+      setFormError('Lütfen boş alanları doldurun.')
+
+    }
+    if(data) {
+      console.log(data)
+      setFormError(null)
+      navigate('/')
+
+    }
+
+  }
 
   useEffect(() => {
     const fetchSupatable = async () => {
@@ -35,8 +65,8 @@ const Update = () => {
   }, [id, navigate])
 
   return (
-    <div className="page create">
-      <form>
+    <div className="page update">
+      <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input 
           type="text" 
@@ -61,6 +91,7 @@ const Update = () => {
         />
 
         <button>Update</button>
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   )
