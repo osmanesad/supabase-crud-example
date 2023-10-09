@@ -21,11 +21,11 @@ const Update = () => {
       return
     }
 
-    const{ data, error } = await supabase
-    .form('supatable')
+    const { data, error } = await supabase
+    .from('supatable')
     .update({ title, method, rating })
     .eq('id', id)
-    .select()
+    
     
     if(error){
       console.log(error)
