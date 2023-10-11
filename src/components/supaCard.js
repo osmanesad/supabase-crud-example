@@ -1,5 +1,23 @@
 import { Link } from "react-router-dom"
+import supabase from "../config/supabaseClient"
+
 const SupaCard = ({supatables}) => {
+
+    const handleDelete = async () => {
+        const { data, erorr } = await supabase
+        .from("supatable")
+        .delete()
+        .eq("id",supatables.id)
+
+        if (erorr) {
+            console.log(erorr)
+        }
+
+        if (data) {
+            console.log(data)
+        }
+
+    }
     
     return (
         <div className="supatable-card">
@@ -12,6 +30,7 @@ const SupaCard = ({supatables}) => {
                 <Link to={'/' + supatables.id}>
                 <i className="material-icons">edit</i>
                 </Link>
+                <i className="material-icons" onClick={handleDelete}>delete</i>
             </div>
         </div>
 
